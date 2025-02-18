@@ -18,9 +18,12 @@
       </div>
       <div class="clue-numbers">
         @for (number of clue.numbers; track number) {
-        <span class="clue-box" (click)="selectClueBox(clue, number)">{{
-          number.number
-        }}</span>
+        <span
+          class="clue-box"
+          [class]="number.state"
+          (click)="selectClueBox(clue, number)"
+          >{{ number.number }}</span
+        >
         }
       </div>
     </div>

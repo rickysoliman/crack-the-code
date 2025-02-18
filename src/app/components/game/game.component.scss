@@ -71,6 +71,10 @@
           cursor: pointer;
         }
       }
+
+      .clue-box.selected {
+        background-color: grey;
+      }
     }
   }
 
