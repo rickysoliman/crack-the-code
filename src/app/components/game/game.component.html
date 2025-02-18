@@ -30,6 +30,31 @@
     }
   </div>
 
+  <!-- MarkUp Buttons -->
+  <div class="mark-up-buttons-wrapper">
+    <button
+      class="correct-button"
+      [disabled]="disableMarkUpButtons"
+      (click)="markAsCorrect()"
+    >
+      Mark as Correct
+    </button>
+    <button
+      class="misplaced-button"
+      [disabled]="disableMarkUpButtons"
+      (click)="markAsMisplaced()"
+    >
+      Mark as Misplaced
+    </button>
+    <button
+      class="wrong-button"
+      [disabled]="disableMarkUpButtons"
+      (click)="markAsWrong()"
+    >
+      Mark as Wrong
+    </button>
+  </div>
+
   <!-- Check Answer Button -->
   <button
     class="check-answer-button"

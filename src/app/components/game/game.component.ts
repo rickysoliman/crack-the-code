@@ -31,6 +31,10 @@ export class GameComponent {
   code: string = ''; // the code to guess
 
   disableCheckButton: boolean = true;
+  disableMarkUpButtons: boolean = true;
+
+  selectedClue: Clue | null = null;
+  selectedNumber: ClueNum | null = null;
 
   clues: Clue[] = [
     {
@@ -118,15 +122,19 @@ export class GameComponent {
   selectClueBox(clue: Clue, number: ClueNum): void {
     console.log({ clue, number });
 
-    // this.clues[clue.index].numbers[number.index].state = 'selected';
-
     switch (number.state) {
       case 'default':
         number.state = 'selected';
         this.deselectOtherClueBoxes(clue, number);
+        this.selectedClue = clue;
+        this.selectedNumber = number;
+        this.disableMarkUpButtons = false;
         break;
       case 'selected':
         number.state = 'default';
+        this.selectedClue = null;
+        this.selectedNumber = null;
+        this.disableMarkUpButtons = true;
         break;
       // case 'correct':
       //   number.state = 'wrong';
@@ -148,6 +156,18 @@ export class GameComponent {
         }
       });
     });
+  }
+
+  markAsCorrect(): void {
+    this.selectedNumber!.state = 'correct';
+  }
+
+  markAsMisplaced(): void {
+    this.selectedNumber!.state = 'misplaced';
+  }
+
+  markAsWrong(): void {
+    this.selectedNumber!.state = 'wrong';
   }
 
   checkAnswer(): void {

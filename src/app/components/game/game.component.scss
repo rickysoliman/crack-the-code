@@ -73,14 +73,48 @@
       }
 
       .clue-box.selected {
-        background-color: grey;
+        background-color: #a3a3a3;
+      }
+
+      .clue-box.correct {
+        background-color: #0dac0d;
+        color: white;
+      }
+
+      .clue-box.misplaced {
+        background-color: #3b3beb;
+        color: white;
+      }
+
+      .clue-box.wrong {
+        background-color: #f63a3a;
+        color: white;
+        text-decoration: line-through;
       }
     }
   }
 
-  .check-answer-button:disabled {
+  .check-answer-button:disabled,
+  .mark-up-buttons-wrapper button:disabled {
     background-color: #cccccc;
     cursor: not-allowed;
     opacity: 0.6;
+  }
+
+  .mark-up-buttons-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px;
+
+    .correct-button {
+      background-color: #0dac0d;
+    }
+    .misplaced-button {
+      background-color: #3b3beb;
+    }
+    .wrong-button {
+      background-color: #f63a3a;
+    }
   }
 }
