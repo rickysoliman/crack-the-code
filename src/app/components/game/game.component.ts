@@ -22,10 +22,6 @@ export class GameComponent {
 
   ngOnInit(): void {
     this.generateCode();
-    console.log({
-      code: this.code,
-      disableCheckButton: this.disableCheckButton,
-    });
 
     this.codeForm.valueChanges.subscribe((value) => {
       this.disableCheckButton = !(
