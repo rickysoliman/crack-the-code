@@ -15,4 +15,26 @@ export class GameComponent {
     digit3: new FormControl(''),
     digit4: new FormControl(''),
   });
+
+  code: string = ''; // the code to guess
+
+  ngOnInit(): void {
+    this.generateCode();
+    console.log({ code: this.code });
+  }
+
+  getRandomNumber(min: number = 0, max: number = 9): number {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  generateCode(): void {
+    let index = 0;
+    while (index < 4) {
+      const digit = this.getRandomNumber();
+      if (!this.code.includes(digit.toString())) {
+        this.code += digit;
+        index++;
+      }
+    }
+  }
 }
