@@ -1,9 +1,74 @@
 <div class="game-wrapper">
   <h1>Crack the Code!</h1>
+
+  <!-- User Input Fields -->
   <form [formGroup]="codeForm" class="code-inputs">
-    <input type="text" maxlength="1" formControlName="digit1" />
-    <input type="text" maxlength="1" formControlName="digit2" />
-    <input type="text" maxlength="1" formControlName="digit3" />
-    <input type="text" maxlength="1" formControlName="digit4" />
+    <input placeholder="?" type="text" maxlength="1" formControlName="digit1" />
+    <input placeholder="?" type="text" maxlength="1" formControlName="digit2" />
+    <input placeholder="?" type="text" maxlength="1" formControlName="digit3" />
+    <input placeholder="?" type="text" maxlength="1" formControlName="digit4" />
   </form>
+
+  <!-- Clues Section -->
+  <div class="clues">
+    <div class="clue">
+      <div class="clue-text-wrapper">
+        <p>One # correct, but wrongly placed</p>
+      </div>
+      <div class="clue-numbers">
+        <span class="clue-box">9</span>
+        <span class="clue-box">2</span>
+        <span class="clue-box">8</span>
+        <span class="clue-box">5</span>
+      </div>
+    </div>
+
+    <div class="clue">
+      <div class="clue-text-wrapper">
+        <p>Two # correct, but wrongly placed</p>
+      </div>
+      <div class="clue-numbers">
+        <span class="clue-box">1</span>
+        <span class="clue-box">9</span>
+        <span class="clue-box">3</span>
+        <span class="clue-box">7</span>
+      </div>
+    </div>
+
+    <div class="clue">
+      <div class="clue-text-wrapper">
+        <p>One # correct and well-placed</p>
+      </div>
+      <div class="clue-numbers">
+        <span class="clue-box">5</span>
+        <span class="clue-box">2</span>
+        <span class="clue-box">0</span>
+        <span class="clue-box">1</span>
+      </div>
+    </div>
+
+    <div class="clue">
+      <div class="clue-text-wrapper">
+        <p>Nothing correct</p>
+      </div>
+      <div class="clue-numbers">
+        <span class="clue-box">6</span>
+        <span class="clue-box">5</span>
+        <span class="clue-box">0</span>
+        <span class="clue-box">7</span>
+      </div>
+    </div>
+
+    <div class="clue">
+      <div class="clue-text-wrapper">
+        <p>Two # correct, but wrongly placed</p>
+      </div>
+      <div class="clue-numbers">
+        <span class="clue-box">8</span>
+        <span class="clue-box">5</span>
+        <span class="clue-box">2</span>
+        <span class="clue-box">1</span>
+      </div>
+    </div>
+  </div>
 </div>
