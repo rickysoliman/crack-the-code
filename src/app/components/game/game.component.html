@@ -11,67 +11,23 @@
 
   <!-- Clues Section -->
   <div class="clues">
+    @for (clue of clues; track clue) {
     <div class="clue">
       <div class="clue-text-wrapper">
-        <p>One # correct, but wrongly placed</p>
+        <p>{{ clue.text }}</p>
       </div>
       <div class="clue-numbers">
-        <span class="clue-box">9</span>
-        <span class="clue-box">2</span>
-        <span class="clue-box">8</span>
-        <span class="clue-box">5</span>
+        @for (number of clue.numbers; track number) {
+        <span class="clue-box" (click)="selectClueBox(clue, number)">{{
+          number.number
+        }}</span>
+        }
       </div>
     </div>
-
-    <div class="clue">
-      <div class="clue-text-wrapper">
-        <p>Two # correct, but wrongly placed</p>
-      </div>
-      <div class="clue-numbers">
-        <span class="clue-box">1</span>
-        <span class="clue-box">9</span>
-        <span class="clue-box">3</span>
-        <span class="clue-box">7</span>
-      </div>
-    </div>
-
-    <div class="clue">
-      <div class="clue-text-wrapper">
-        <p>One # correct and well-placed</p>
-      </div>
-      <div class="clue-numbers">
-        <span class="clue-box">5</span>
-        <span class="clue-box">2</span>
-        <span class="clue-box">0</span>
-        <span class="clue-box">1</span>
-      </div>
-    </div>
-
-    <div class="clue">
-      <div class="clue-text-wrapper">
-        <p>Nothing correct</p>
-      </div>
-      <div class="clue-numbers">
-        <span class="clue-box">6</span>
-        <span class="clue-box">5</span>
-        <span class="clue-box">0</span>
-        <span class="clue-box">7</span>
-      </div>
-    </div>
-
-    <div class="clue">
-      <div class="clue-text-wrapper">
-        <p>Two # correct, but wrongly placed</p>
-      </div>
-      <div class="clue-numbers">
-        <span class="clue-box">8</span>
-        <span class="clue-box">5</span>
-        <span class="clue-box">2</span>
-        <span class="clue-box">1</span>
-      </div>
-    </div>
+    }
   </div>
 
+  <!-- Check Answer Button -->
   <button
     class="check-answer-button"
     (click)="checkAnswer()"

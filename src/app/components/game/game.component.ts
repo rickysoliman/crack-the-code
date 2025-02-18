@@ -1,6 +1,17 @@
 import { Component } from '@angular/core';
 import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
 
+interface ClueNum {
+  number: string;
+  state: 'default' | 'correct' | 'wrong' | 'misplaced';
+}
+
+interface Clue {
+  text: string;
+  numbers: ClueNum[];
+  index: number;
+}
+
 @Component({
   selector: 'app-game',
   standalone: true,
@@ -20,6 +31,59 @@ export class GameComponent {
 
   disableCheckButton: boolean = true;
 
+  clues: Clue[] = [
+    {
+      text: 'One # correct, but wrongly placed',
+      index: 0,
+      numbers: [
+        { number: '9', state: 'default' },
+        { number: '2', state: 'default' },
+        { number: '8', state: 'default' },
+        { number: '5', state: 'default' },
+      ],
+    },
+    {
+      text: 'Two #s correct, but wrongly placed',
+      index: 1,
+      numbers: [
+        { number: '1', state: 'default' },
+        { number: '9', state: 'default' },
+        { number: '3', state: 'default' },
+        { number: '7', state: 'default' },
+      ],
+    },
+    {
+      text: 'One # correct, correctly placed',
+      index: 2,
+      numbers: [
+        { number: '5', state: 'default' },
+        { number: '2', state: 'default' },
+        { number: '0', state: 'default' },
+        { number: '1', state: 'default' },
+      ],
+    },
+    {
+      text: 'Nothing correct',
+      index: 3,
+      numbers: [
+        { number: '6', state: 'default' },
+        { number: '5', state: 'default' },
+        { number: '0', state: 'default' },
+        { number: '7', state: 'default' },
+      ],
+    },
+    {
+      text: 'Two #s correct, but wrongly placed',
+      index: 4,
+      numbers: [
+        { number: '8', state: 'default' },
+        { number: '5', state: 'default' },
+        { number: '2', state: 'default' },
+        { number: '1', state: 'default' },
+      ],
+    },
+  ];
+
   ngOnInit(): void {
     this.generateCode();
 
@@ -38,14 +102,20 @@ export class GameComponent {
   }
 
   generateCode(): void {
-    let index = 0;
-    while (index < 4) {
-      const digit = this.getRandomNumber();
-      if (!this.code.includes(digit.toString())) {
-        this.code += digit;
-        index++;
-      }
-    }
+    // let index = 0;
+    // while (index < 4) {
+    //   const digit = this.getRandomNumber();
+    //   if (!this.code.includes(digit.toString())) {
+    //     this.code += digit;
+    //     index++;
+    //   }
+    // }
+
+    this.code = '3841'; // for testing purposes
+  }
+
+  selectClueBox(clue: Clue, number: ClueNum): void {
+    console.log({ clue, number });
   }
 
   checkAnswer(): void {
