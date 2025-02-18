@@ -20,10 +20,12 @@
         @for (number of clue.numbers; track number) {
         <span
           class="clue-box"
+          [ngClass]="{ selected: number.selected }"
           [class]="number.state"
           (click)="selectClueBox(clue, number)"
-          >{{ number.number }}</span
         >
+          {{ number.number }}
+        </span>
         }
       </div>
     </div>
@@ -37,21 +39,33 @@
       [disabled]="disableMarkUpButtons"
       (click)="markAsCorrect()"
     >
-      Mark as Correct
+      {{
+        selectedNumber?.state === "correct"
+          ? "Return to Default"
+          : "Mark as Correct"
+      }}
     </button>
     <button
       class="misplaced-button"
       [disabled]="disableMarkUpButtons"
       (click)="markAsMisplaced()"
     >
-      Mark as Misplaced
+      {{
+        selectedNumber?.state === "misplaced"
+          ? "Return to Default"
+          : "Mark as Misplaced"
+      }}
     </button>
     <button
       class="wrong-button"
       [disabled]="disableMarkUpButtons"
       (click)="markAsWrong()"
     >
-      Mark as Wrong
+      {{
+        selectedNumber?.state === "wrong"
+          ? "Return to Default"
+          : "Mark as Wrong"
+      }}
     </button>
   </div>
 

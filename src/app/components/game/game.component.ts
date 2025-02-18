@@ -1,10 +1,12 @@
+import { NgClass } from '@angular/common';
 import { Component } from '@angular/core';
 import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
 
 interface ClueNum {
   number: string;
-  state: 'default' | 'selected' | 'correct' | 'wrong' | 'misplaced';
+  state: 'default' | 'correct' | 'wrong' | 'misplaced';
   index: number;
+  selected: boolean;
 }
 
 interface Clue {
@@ -16,7 +18,7 @@ interface Clue {
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, NgClass],
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss',
 })
@@ -38,53 +40,53 @@ export class GameComponent {
 
   clues: Clue[] = [
     {
-      text: 'One # correct, but wrongly placed',
+      text: 'One number correct, but wrongly placed',
       index: 0,
       numbers: [
-        { number: '9', state: 'default', index: 0 },
-        { number: '2', state: 'default', index: 1 },
-        { number: '8', state: 'default', index: 2 },
-        { number: '5', state: 'default', index: 3 },
+        { number: '7', state: 'default', index: 0, selected: false },
+        { number: '9', state: 'default', index: 1, selected: false },
+        { number: '1', state: 'default', index: 2, selected: false },
+        { number: '6', state: 'default', index: 3, selected: false },
       ],
     },
     {
-      text: 'Two #s correct, but wrongly placed',
+      text: 'One number correct and correctly placed',
       index: 1,
       numbers: [
-        { number: '1', state: 'default', index: 0 },
-        { number: '9', state: 'default', index: 1 },
-        { number: '3', state: 'default', index: 2 },
-        { number: '7', state: 'default', index: 3 },
+        { number: '3', state: 'default', index: 0, selected: false },
+        { number: '8', state: 'default', index: 1, selected: false },
+        { number: '1', state: 'default', index: 2, selected: false },
+        { number: '7', state: 'default', index: 3, selected: false },
       ],
     },
     {
-      text: 'One # correct, correctly placed',
+      text: 'Two numbers correct, but wrongly placed',
       index: 2,
       numbers: [
-        { number: '5', state: 'default', index: 0 },
-        { number: '2', state: 'default', index: 1 },
-        { number: '0', state: 'default', index: 2 },
-        { number: '1', state: 'default', index: 3 },
+        { number: '2', state: 'default', index: 0, selected: false },
+        { number: '4', state: 'default', index: 1, selected: false },
+        { number: '3', state: 'default', index: 2, selected: false },
+        { number: '9', state: 'default', index: 3, selected: false },
       ],
     },
     {
       text: 'Nothing correct',
       index: 3,
       numbers: [
-        { number: '6', state: 'default', index: 0 },
-        { number: '5', state: 'default', index: 1 },
-        { number: '0', state: 'default', index: 2 },
-        { number: '7', state: 'default', index: 3 },
+        { number: '3', state: 'default', index: 0, selected: false },
+        { number: '5', state: 'default', index: 1, selected: false },
+        { number: '0', state: 'default', index: 2, selected: false },
+        { number: '7', state: 'default', index: 3, selected: false },
       ],
     },
     {
-      text: 'Two #s correct, but wrongly placed',
+      text: 'Two numbers correct and correctly placed',
       index: 4,
       numbers: [
-        { number: '8', state: 'default', index: 0 },
-        { number: '5', state: 'default', index: 1 },
-        { number: '2', state: 'default', index: 2 },
-        { number: '1', state: 'default', index: 3 },
+        { number: '6', state: 'default', index: 0, selected: false },
+        { number: '7', state: 'default', index: 1, selected: false },
+        { number: '3', state: 'default', index: 2, selected: false },
+        { number: '4', state: 'default', index: 3, selected: false },
       ],
     },
   ];
@@ -116,58 +118,63 @@ export class GameComponent {
     //   }
     // }
 
-    this.code = '3841'; // for testing purposes
+    this.code = '6824'; // for testing purposes
   }
 
   selectClueBox(clue: Clue, number: ClueNum): void {
     console.log({ clue, number });
 
-    switch (number.state) {
-      case 'default':
-        number.state = 'selected';
-        this.deselectOtherClueBoxes(clue, number);
-        this.selectedClue = clue;
-        this.selectedNumber = number;
-        this.disableMarkUpButtons = false;
-        break;
-      case 'selected':
-        number.state = 'default';
-        this.selectedClue = null;
-        this.selectedNumber = null;
-        this.disableMarkUpButtons = true;
-        break;
-      // case 'correct':
-      //   number.state = 'wrong';
-      //   break;
-      // case 'wrong':
-      //   number.state = 'misplaced';
-      //   break;
-      // case 'misplaced':
-      //   number.state = 'default';
-      //   break;
+    if (number.selected) {
+      number.selected = false;
+      this.selectedClue = null;
+      this.selectedNumber = null;
+      this.disableMarkUpButtons = true;
+      return;
     }
+
+    this.deselectOtherClueBoxes(clue, number);
+
+    number.selected = true;
+    this.selectedClue = clue;
+    this.selectedNumber = number;
+    this.disableMarkUpButtons = false;
   }
 
   deselectOtherClueBoxes(clue: Clue, number: ClueNum): void {
     this.clues.forEach((c) => {
       c.numbers.forEach((n) => {
-        if (c !== clue || n !== number) {
-          n.state = 'default';
+        if (n !== number) {
+          n.selected = false;
         }
       });
     });
   }
 
   markAsCorrect(): void {
-    this.selectedNumber!.state = 'correct';
+    if (!this.selectedNumber) return;
+    this.selectedNumber.state =
+      this.selectedNumber.state === 'correct' ? 'default' : 'correct';
+    this.selectedNumber.selected = false;
+    this.disableMarkUpButtons = true;
+    this.selectedNumber = null;
   }
 
   markAsMisplaced(): void {
-    this.selectedNumber!.state = 'misplaced';
+    if (!this.selectedNumber) return;
+    this.selectedNumber.state =
+      this.selectedNumber.state === 'misplaced' ? 'default' : 'misplaced';
+    this.selectedNumber.selected = false;
+    this.disableMarkUpButtons = true;
+    this.selectedNumber = null;
   }
 
   markAsWrong(): void {
-    this.selectedNumber!.state = 'wrong';
+    if (!this.selectedNumber) return;
+    this.selectedNumber.state =
+      this.selectedNumber.state === 'wrong' ? 'default' : 'wrong';
+    this.selectedNumber.selected = false;
+    this.disableMarkUpButtons = true;
+    this.selectedNumber = null;
   }
 
   checkAnswer(): void {
