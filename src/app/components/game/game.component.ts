@@ -18,9 +18,23 @@ export class GameComponent {
 
   code: string = ''; // the code to guess
 
+  disableCheckButton: boolean = true;
+
   ngOnInit(): void {
     this.generateCode();
-    console.log({ code: this.code });
+    console.log({
+      code: this.code,
+      disableCheckButton: this.disableCheckButton,
+    });
+
+    this.codeForm.valueChanges.subscribe((value) => {
+      this.disableCheckButton = !(
+        value.digit1 &&
+        value.digit2 &&
+        value.digit3 &&
+        value.digit4
+      );
+    });
   }
 
   getRandomNumber(min: number = 0, max: number = 9): number {
@@ -36,5 +50,10 @@ export class GameComponent {
         index++;
       }
     }
+  }
+
+  checkAnswer(): void {
+    const guess = this.codeForm.value;
+    console.log({ guess });
   }
 }
