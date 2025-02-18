@@ -53,7 +53,13 @@ export class GameComponent {
   }
 
   checkAnswer(): void {
-    const guess = this.codeForm.value;
-    console.log({ guess });
+    const value = this.codeForm.value;
+    const guess = `${value.digit1}${value.digit2}${value.digit3}${value.digit4}`;
+
+    if (guess === this.code) {
+      alert('Congratulations! You have guessed the correct code!');
+    } else {
+      alert('Sorry, you have not guessed the correct code.');
+    }
   }
 }
