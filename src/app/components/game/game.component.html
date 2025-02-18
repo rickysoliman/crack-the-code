@@ -1,1 +1,9 @@
-<p>game works!</p>
+<div class="game-wrapper">
+  <h1>Crack the Code!</h1>
+  <form [formGroup]="codeForm" class="code-inputs">
+    <input type="text" maxlength="1" formControlName="digit1" />
+    <input type="text" maxlength="1" formControlName="digit2" />
+    <input type="text" maxlength="1" formControlName="digit3" />
+    <input type="text" maxlength="1" formControlName="digit4" />
+  </form>
+</div>

@@ -1,0 +1,33 @@
+.game-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  .code-inputs {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+
+    input {
+      width: 60px;
+      height: 60px;
+      text-align: center;
+      font-size: 2rem;
+      font-family: "Permanent Marker", cursive;
+      border: 3px solid var(--primary-color);
+      border-radius: 8px;
+      background: var(--bg-light);
+      color: var(--text-dark);
+      box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
+      outline: none;
+      transition: 0.3s ease-in-out;
+
+      &:focus {
+        border-color: var(--accent-color);
+        transform: scale(1.1);
+      }
+    }
+  }
+}
