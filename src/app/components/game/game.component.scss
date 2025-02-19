@@ -102,7 +102,8 @@
 
   .check-answer-button:disabled,
   .mark-up-buttons-wrapper button:disabled,
-  .mark-all-as-wrong-button:disabled {
+  .mark-all-as-wrong-button:disabled,
+  .reset-button:disabled {
     background-color: #cccccc;
     cursor: not-allowed;
     opacity: 0.6;

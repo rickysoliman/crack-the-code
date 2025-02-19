@@ -35,6 +35,7 @@ export class GameComponent {
   disableCheckButton: boolean = true;
   disableMarkUpButtons: boolean = true;
   disableMarkAllAsWrongButton: boolean = false;
+  disableResetButton: boolean = true;
 
   selectedClue: Clue | null = null;
   selectedNumber: ClueNum | null = null;
@@ -68,11 +69,16 @@ export class GameComponent {
       }
     }
     this.generateClues();
-    // this.code = '6824'; // for testing purposes
   }
 
   generateClues(): void {
     this.clues = [];
+    const allCodeDigits = new Set(this.code); // Ensure all code digits appear
+    const usedDigits = new Set<string>();
+
+    // Track known correct/misplaced digits to ensure consistency
+    const knownCorrect = new Map<number, string>(); // index -> digit
+    const knownMisplaced = new Set<string>(); // digits known to be in the code but misplaced
 
     const generateUniqueGuess = (): string[] => {
       let guess: string[] = [];
@@ -85,7 +91,6 @@ export class GameComponent {
       return guess;
     };
 
-    // Function to evaluate the guess against the code
     const evaluateGuess = (
       guess: string[]
     ): { correct: number; misplaced: number } => {
@@ -130,7 +135,38 @@ export class GameComponent {
       do {
         guess = generateUniqueGuess();
         result = evaluateGuess(guess);
+
+        // Ensure no contradictions with previously known correct/misplaced digits
+        if (text === 'Nothing correct') {
+          if (guess.some((digit) => allCodeDigits.has(digit))) {
+            continue;
+          }
+        }
+
+        // Ensure "One number correct" clues don't contradict later confirmations
+        if (correct === 1 || misplaced === 1) {
+          let confirmedDigits = [...knownCorrect.values(), ...knownMisplaced];
+          if (confirmedDigits.length > 1) continue;
+        }
+
+        // Ensure "Two numbers correct" clues don't contradict previous statements
+        if (correct === 2 || misplaced === 2) {
+          if ([...knownCorrect.values(), ...knownMisplaced].length < 2)
+            continue;
+        }
       } while (result.correct !== correct || result.misplaced !== misplaced);
+
+      // Track used digits
+      guess.forEach((digit, i) => usedDigits.add(digit));
+
+      // Update known correct/misplaced numbers
+      guess.forEach((digit, i) => {
+        if (result.correct > 0 && this.code[i] === digit) {
+          knownCorrect.set(i, digit); // Correctly placed
+        } else if (result.misplaced > 0 && this.code.includes(digit)) {
+          knownMisplaced.add(digit); // Misplaced
+        }
+      });
 
       this.clues.push({
         text,
@@ -143,6 +179,24 @@ export class GameComponent {
         })),
       });
     });
+
+    // Ensure all code digits appear at least once
+    allCodeDigits.forEach((codeDigit) => {
+      if (!usedDigits.has(codeDigit)) {
+        // Find a clue with a replaceable digit
+        for (const clue of this.clues) {
+          const replaceableIndex = clue.numbers.findIndex(
+            (num) => !this.code.includes(num.number)
+          );
+          if (replaceableIndex !== -1) {
+            clue.numbers[replaceableIndex].number = codeDigit;
+            usedDigits.add(codeDigit);
+            break;
+          }
+        }
+      }
+    });
+
     console.log({ clues: this.clues, code: this.code });
   }
 
@@ -203,6 +257,7 @@ export class GameComponent {
     this.disableMarkUpButtons = true;
     this.selectedNumber = null;
     this.disableMarkAllAsWrongButton = this.isMarkAllAsWrongButtonDisabled();
+    this.disableResetButton = this.isResetButtonDisabled();
   }
 
   markAsMisplaced(): void {
@@ -214,6 +269,7 @@ export class GameComponent {
     this.disableMarkUpButtons = true;
     this.selectedNumber = null;
     this.disableMarkAllAsWrongButton = this.isMarkAllAsWrongButtonDisabled();
+    this.disableResetButton = this.isResetButtonDisabled();
   }
 
   markAsWrong(): void {
@@ -231,6 +287,7 @@ export class GameComponent {
     this.disableMarkUpButtons = true;
     this.selectedNumber = null;
     this.disableMarkAllAsWrongButton = this.isMarkAllAsWrongButtonDisabled();
+    this.disableResetButton = this.isResetButtonDisabled();
   }
 
   isMarkAllAsWrongButtonDisabled(): boolean {
@@ -250,6 +307,22 @@ export class GameComponent {
     return areAllNumbersMarkedAsWrong;
   }
 
+  isResetButtonDisabled(): boolean {
+    let areAllNumbersDefault: boolean = true;
+    for (let i = 0; i < this.clues.length; i++) {
+      const clue = this.clues[i];
+      for (let j = 0; j < clue.numbers.length; j++) {
+        const number = clue.numbers[j];
+        if (number.state !== 'default') {
+          areAllNumbersDefault = false;
+          break;
+        }
+      }
+    }
+
+    return areAllNumbersDefault;
+  }
+
   markClueAsWrong(clue: any): void {
     clue.numbers.forEach((number: any) => {
       number.state = 'wrong';
@@ -263,6 +336,20 @@ export class GameComponent {
     });
 
     this.disableMarkAllAsWrongButton = this.isMarkAllAsWrongButtonDisabled();
+    this.disableResetButton = this.isResetButtonDisabled();
+  }
+
+  resetMarkUps(): void {
+    this.clues.forEach((clue) => {
+      clue.numbers.forEach((number) => {
+        number.state = 'default';
+      });
+    });
+
+    this.codeForm.reset();
+
+    this.disableMarkAllAsWrongButton = false;
+    this.disableResetButton = true;
   }
 
   checkAnswer(): void {

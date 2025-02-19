@@ -41,6 +41,15 @@
     }
   </div>
 
+  <!-- Reset Button -->
+  <button
+    class="reset-button"
+    (click)="resetMarkUps()"
+    [disabled]="disableResetButton"
+  >
+    Reset
+  </button>
+
   <!-- MarkUp Buttons -->
   <div class="mark-up-buttons-wrapper">
     <button
