@@ -16,7 +16,13 @@
       <div class="clue-text-wrapper">
         <p>{{ clue.text }}</p>
         @if (clue.text === 'Nothing correct') {
-        <button (click)="markClueAsWrong(clue)">Mark all as Wrong</button>
+        <button
+          (click)="markClueAsWrong(clue)"
+          [disabled]="disableMarkAllAsWrongButton"
+          class="mark-all-as-wrong-button"
+        >
+          Mark all as Wrong
+        </button>
         }
       </div>
       <div class="clue-numbers">

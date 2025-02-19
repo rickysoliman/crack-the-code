@@ -34,65 +34,12 @@ export class GameComponent {
 
   disableCheckButton: boolean = true;
   disableMarkUpButtons: boolean = true;
+  disableMarkAllAsWrongButton: boolean = false;
 
   selectedClue: Clue | null = null;
   selectedNumber: ClueNum | null = null;
 
   clues: Clue[] = [];
-
-  // testing puzzle
-  // clues: Clue[] = [
-  //   {
-  //     text: 'One number correct, but wrongly placed',
-  //     index: 0,
-  //     numbers: [
-  //       { number: '7', state: 'default', index: 0, selected: false },
-  //       { number: '9', state: 'default', index: 1, selected: false },
-  //       { number: '1', state: 'default', index: 2, selected: false },
-  //       { number: '6', state: 'default', index: 3, selected: false },
-  //     ],
-  //   },
-  //   {
-  //     text: 'One number correct and correctly placed',
-  //     index: 1,
-  //     numbers: [
-  //       { number: '3', state: 'default', index: 0, selected: false },
-  //       { number: '8', state: 'default', index: 1, selected: false },
-  //       { number: '1', state: 'default', index: 2, selected: false },
-  //       { number: '7', state: 'default', index: 3, selected: false },
-  //     ],
-  //   },
-  //   {
-  //     text: 'Two numbers correct, but wrongly placed',
-  //     index: 2,
-  //     numbers: [
-  //       { number: '2', state: 'default', index: 0, selected: false },
-  //       { number: '4', state: 'default', index: 1, selected: false },
-  //       { number: '3', state: 'default', index: 2, selected: false },
-  //       { number: '9', state: 'default', index: 3, selected: false },
-  //     ],
-  //   },
-  //   {
-  //     text: 'Nothing correct',
-  //     index: 3,
-  //     numbers: [
-  //       { number: '3', state: 'default', index: 0, selected: false },
-  //       { number: '5', state: 'default', index: 1, selected: false },
-  //       { number: '0', state: 'default', index: 2, selected: false },
-  //       { number: '7', state: 'default', index: 3, selected: false },
-  //     ],
-  //   },
-  //   {
-  //     text: 'Two numbers correct and correctly placed',
-  //     index: 4,
-  //     numbers: [
-  //       { number: '6', state: 'default', index: 0, selected: false },
-  //       { number: '7', state: 'default', index: 1, selected: false },
-  //       { number: '3', state: 'default', index: 2, selected: false },
-  //       { number: '4', state: 'default', index: 3, selected: false },
-  //     ],
-  //   },
-  // ];
 
   ngOnInit(): void {
     this.generateCode();
@@ -255,6 +202,7 @@ export class GameComponent {
     this.selectedNumber.selected = false;
     this.disableMarkUpButtons = true;
     this.selectedNumber = null;
+    this.disableMarkAllAsWrongButton = this.isMarkAllAsWrongButtonDisabled();
   }
 
   markAsMisplaced(): void {
@@ -265,6 +213,7 @@ export class GameComponent {
     this.selectedNumber.selected = false;
     this.disableMarkUpButtons = true;
     this.selectedNumber = null;
+    this.disableMarkAllAsWrongButton = this.isMarkAllAsWrongButtonDisabled();
   }
 
   markAsWrong(): void {
@@ -281,6 +230,24 @@ export class GameComponent {
 
     this.disableMarkUpButtons = true;
     this.selectedNumber = null;
+    this.disableMarkAllAsWrongButton = this.isMarkAllAsWrongButtonDisabled();
+  }
+
+  isMarkAllAsWrongButtonDisabled(): boolean {
+    const nothingCorrectClue = this.clues.find((clue) => {
+      return clue.text === 'Nothing correct';
+    });
+
+    let areAllNumbersMarkedAsWrong: boolean = true;
+    for (let i = 0; i < nothingCorrectClue!.numbers.length; i++) {
+      const number = nothingCorrectClue?.numbers[i];
+      if (number!.state !== 'wrong') {
+        areAllNumbersMarkedAsWrong = false;
+        break;
+      }
+    }
+
+    return areAllNumbersMarkedAsWrong;
   }
 
   markClueAsWrong(clue: any): void {
@@ -294,6 +261,8 @@ export class GameComponent {
         });
       });
     });
+
+    this.disableMarkAllAsWrongButton = this.isMarkAllAsWrongButtonDisabled();
   }
 
   checkAnswer(): void {
