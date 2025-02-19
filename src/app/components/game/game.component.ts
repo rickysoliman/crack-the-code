@@ -283,6 +283,19 @@ export class GameComponent {
     this.selectedNumber = null;
   }
 
+  markClueAsWrong(clue: any): void {
+    clue.numbers.forEach((number: any) => {
+      number.state = 'wrong';
+      this.clues.forEach((otherClue: any) => {
+        otherClue.numbers.forEach((otherNumber: any) => {
+          if (otherNumber.number === number.number) {
+            otherNumber.state = 'wrong';
+          }
+        });
+      });
+    });
+  }
+
   checkAnswer(): void {
     const value = this.codeForm.value;
     const guess = `${value.digit1}${value.digit2}${value.digit3}${value.digit4}`;

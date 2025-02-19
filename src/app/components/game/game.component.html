@@ -15,6 +15,9 @@
     <div class="clue">
       <div class="clue-text-wrapper">
         <p>{{ clue.text }}</p>
+        @if (clue.text === 'Nothing correct') {
+        <button (click)="markClueAsWrong(clue)">Mark all as Wrong</button>
+        }
       </div>
       <div class="clue-numbers">
         @for (number of clue.numbers; track number) {
