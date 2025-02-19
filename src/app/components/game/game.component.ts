@@ -170,9 +170,14 @@ export class GameComponent {
 
   markAsWrong(): void {
     if (!this.selectedNumber) return;
-    this.selectedNumber.state =
-      this.selectedNumber.state === 'wrong' ? 'default' : 'wrong';
-    this.selectedNumber.selected = false;
+    this.clues.forEach((clue) => {
+      clue.numbers.forEach((number) => {
+        if (number.number === this.selectedNumber?.number) {
+          number.state = number.state === 'wrong' ? 'default' : 'wrong';
+          number.selected = false;
+        }
+      });
+    });
     this.disableMarkUpButtons = true;
     this.selectedNumber = null;
   }
