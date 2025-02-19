@@ -119,7 +119,11 @@ export class GameComponent {
         correct: 0,
         misplaced: 2,
       },
-      { text: 'One number correct and well-placed', correct: 1, misplaced: 0 },
+      {
+        text: 'One number correct and correctly placed',
+        correct: 1,
+        misplaced: 0,
+      },
       { text: 'Nothing correct', correct: 0, misplaced: 0 },
       {
         text: 'Two numbers correct and correctly placed',
@@ -361,5 +365,11 @@ export class GameComponent {
     } else {
       alert('Sorry, you have not guessed the correct code.');
     }
+  }
+
+  newGame(): void {
+    this.code = '';
+    this.generateCode();
+    this.resetMarkUps();
   }
 }
