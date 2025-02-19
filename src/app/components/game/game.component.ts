@@ -152,8 +152,30 @@ export class GameComponent {
 
   markAsCorrect(): void {
     if (!this.selectedNumber) return;
-    this.selectedNumber.state =
+
+    const newState =
       this.selectedNumber.state === 'correct' ? 'default' : 'correct';
+
+    this.clues.forEach((clue) => {
+      clue.numbers.forEach((number) => {
+        if (number.number === this.selectedNumber?.number) {
+          if (number.index === this.selectedNumber?.index) {
+            number.state = newState;
+          } else {
+            number.state = newState === 'correct' ? 'misplaced' : 'default';
+          }
+        }
+      });
+    });
+
+    if (newState === 'correct') {
+      const controlName = `digit${this.selectedNumber.index + 1}`;
+      this.codeForm.get(controlName)?.setValue(this.selectedNumber.number);
+    } else {
+      const controlName = `digit${this.selectedNumber.index + 1}`;
+      this.codeForm.get(controlName)?.setValue('');
+    }
+
     this.selectedNumber.selected = false;
     this.disableMarkUpButtons = true;
     this.selectedNumber = null;
@@ -161,6 +183,7 @@ export class GameComponent {
 
   markAsMisplaced(): void {
     if (!this.selectedNumber) return;
+
     this.selectedNumber.state =
       this.selectedNumber.state === 'misplaced' ? 'default' : 'misplaced';
     this.selectedNumber.selected = false;
@@ -170,6 +193,7 @@ export class GameComponent {
 
   markAsWrong(): void {
     if (!this.selectedNumber) return;
+
     this.clues.forEach((clue) => {
       clue.numbers.forEach((number) => {
         if (number.number === this.selectedNumber?.number) {
@@ -178,6 +202,7 @@ export class GameComponent {
         }
       });
     });
+
     this.disableMarkUpButtons = true;
     this.selectedNumber = null;
   }
