@@ -38,58 +38,61 @@ export class GameComponent {
   selectedClue: Clue | null = null;
   selectedNumber: ClueNum | null = null;
 
-  clues: Clue[] = [
-    {
-      text: 'One number correct, but wrongly placed',
-      index: 0,
-      numbers: [
-        { number: '7', state: 'default', index: 0, selected: false },
-        { number: '9', state: 'default', index: 1, selected: false },
-        { number: '1', state: 'default', index: 2, selected: false },
-        { number: '6', state: 'default', index: 3, selected: false },
-      ],
-    },
-    {
-      text: 'One number correct and correctly placed',
-      index: 1,
-      numbers: [
-        { number: '3', state: 'default', index: 0, selected: false },
-        { number: '8', state: 'default', index: 1, selected: false },
-        { number: '1', state: 'default', index: 2, selected: false },
-        { number: '7', state: 'default', index: 3, selected: false },
-      ],
-    },
-    {
-      text: 'Two numbers correct, but wrongly placed',
-      index: 2,
-      numbers: [
-        { number: '2', state: 'default', index: 0, selected: false },
-        { number: '4', state: 'default', index: 1, selected: false },
-        { number: '3', state: 'default', index: 2, selected: false },
-        { number: '9', state: 'default', index: 3, selected: false },
-      ],
-    },
-    {
-      text: 'Nothing correct',
-      index: 3,
-      numbers: [
-        { number: '3', state: 'default', index: 0, selected: false },
-        { number: '5', state: 'default', index: 1, selected: false },
-        { number: '0', state: 'default', index: 2, selected: false },
-        { number: '7', state: 'default', index: 3, selected: false },
-      ],
-    },
-    {
-      text: 'Two numbers correct and correctly placed',
-      index: 4,
-      numbers: [
-        { number: '6', state: 'default', index: 0, selected: false },
-        { number: '7', state: 'default', index: 1, selected: false },
-        { number: '3', state: 'default', index: 2, selected: false },
-        { number: '4', state: 'default', index: 3, selected: false },
-      ],
-    },
-  ];
+  clues: Clue[] = [];
+
+  // testing puzzle
+  // clues: Clue[] = [
+  //   {
+  //     text: 'One number correct, but wrongly placed',
+  //     index: 0,
+  //     numbers: [
+  //       { number: '7', state: 'default', index: 0, selected: false },
+  //       { number: '9', state: 'default', index: 1, selected: false },
+  //       { number: '1', state: 'default', index: 2, selected: false },
+  //       { number: '6', state: 'default', index: 3, selected: false },
+  //     ],
+  //   },
+  //   {
+  //     text: 'One number correct and correctly placed',
+  //     index: 1,
+  //     numbers: [
+  //       { number: '3', state: 'default', index: 0, selected: false },
+  //       { number: '8', state: 'default', index: 1, selected: false },
+  //       { number: '1', state: 'default', index: 2, selected: false },
+  //       { number: '7', state: 'default', index: 3, selected: false },
+  //     ],
+  //   },
+  //   {
+  //     text: 'Two numbers correct, but wrongly placed',
+  //     index: 2,
+  //     numbers: [
+  //       { number: '2', state: 'default', index: 0, selected: false },
+  //       { number: '4', state: 'default', index: 1, selected: false },
+  //       { number: '3', state: 'default', index: 2, selected: false },
+  //       { number: '9', state: 'default', index: 3, selected: false },
+  //     ],
+  //   },
+  //   {
+  //     text: 'Nothing correct',
+  //     index: 3,
+  //     numbers: [
+  //       { number: '3', state: 'default', index: 0, selected: false },
+  //       { number: '5', state: 'default', index: 1, selected: false },
+  //       { number: '0', state: 'default', index: 2, selected: false },
+  //       { number: '7', state: 'default', index: 3, selected: false },
+  //     ],
+  //   },
+  //   {
+  //     text: 'Two numbers correct and correctly placed',
+  //     index: 4,
+  //     numbers: [
+  //       { number: '6', state: 'default', index: 0, selected: false },
+  //       { number: '7', state: 'default', index: 1, selected: false },
+  //       { number: '3', state: 'default', index: 2, selected: false },
+  //       { number: '4', state: 'default', index: 3, selected: false },
+  //     ],
+  //   },
+  // ];
 
   ngOnInit(): void {
     this.generateCode();
@@ -109,21 +112,94 @@ export class GameComponent {
   }
 
   generateCode(): void {
-    // let index = 0;
-    // while (index < 4) {
-    //   const digit = this.getRandomNumber();
-    //   if (!this.code.includes(digit.toString())) {
-    //     this.code += digit;
-    //     index++;
-    //   }
-    // }
+    let index = 0;
+    while (index < 4) {
+      const digit = this.getRandomNumber();
+      if (!this.code.includes(digit.toString())) {
+        this.code += digit;
+        index++;
+      }
+    }
+    this.generateClues();
+    // this.code = '6824'; // for testing purposes
+  }
 
-    this.code = '6824'; // for testing purposes
+  generateClues(): void {
+    this.clues = [];
+
+    const generateUniqueGuess = (): string[] => {
+      let guess: string[] = [];
+      while (guess.length < 4) {
+        const digit = this.getRandomNumber().toString();
+        if (!guess.includes(digit)) {
+          guess.push(digit);
+        }
+      }
+      return guess;
+    };
+
+    // Function to evaluate the guess against the code
+    const evaluateGuess = (
+      guess: string[]
+    ): { correct: number; misplaced: number } => {
+      let correct = 0;
+      let misplaced = 0;
+
+      guess.forEach((digit, index) => {
+        if (digit === this.code[index]) {
+          correct++; // Correct and well-placed
+        } else if (this.code.includes(digit)) {
+          misplaced++; // Correct but wrongly placed
+        }
+      });
+
+      return { correct, misplaced };
+    };
+
+    const clueTypes = [
+      {
+        text: 'One number correct, but wrongly placed',
+        correct: 0,
+        misplaced: 1,
+      },
+      {
+        text: 'Two numbers correct, but wrongly placed',
+        correct: 0,
+        misplaced: 2,
+      },
+      { text: 'One number correct and well-placed', correct: 1, misplaced: 0 },
+      { text: 'Nothing correct', correct: 0, misplaced: 0 },
+      {
+        text: 'Two numbers correct and correctly placed',
+        correct: 2,
+        misplaced: 0,
+      },
+    ];
+
+    clueTypes.forEach(({ text, correct, misplaced }, index) => {
+      let guess: string[];
+      let result;
+
+      do {
+        guess = generateUniqueGuess();
+        result = evaluateGuess(guess);
+      } while (result.correct !== correct || result.misplaced !== misplaced);
+
+      this.clues.push({
+        text,
+        index,
+        numbers: guess.map((num, i) => ({
+          number: num,
+          state: 'default',
+          index: i,
+          selected: false,
+        })),
+      });
+    });
+    console.log({ clues: this.clues, code: this.code });
   }
 
   selectClueBox(clue: Clue, number: ClueNum): void {
-    console.log({ clue, number });
-
     if (number.selected) {
       number.selected = false;
       this.selectedClue = null;
