@@ -72,7 +72,6 @@ export class GameComponent {
   }
 
   generateClues(): void {
-    this.clues = [];
     const allCodeDigits = new Set(this.code); // Ensure all code digits appear
     const usedDigits = new Set<string>();
 
