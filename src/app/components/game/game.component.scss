@@ -130,3 +130,68 @@
     margin-top: 20px;
   }
 }
+
+/* 📱 Mobile Styling */
+@media (max-width: 600px) {
+  .game-wrapper {
+    padding: 10px;
+    width: 100%;
+
+    .code-inputs {
+      gap: 5px;
+
+      input {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+      }
+    }
+
+    .clues {
+      width: 100%;
+      gap: 10px;
+
+      .clue {
+        flex-direction: column;
+        gap: 10px;
+
+        .clue-text-wrapper {
+          width: 100%;
+          font-size: medium;
+          justify-content: center;
+          text-align: center;
+        }
+
+        .clue-numbers {
+          width: 100%;
+          flex-wrap: wrap;
+          gap: 5px;
+        }
+
+        .clue-box {
+          width: 40px;
+          height: 40px;
+          font-size: 20px;
+        }
+      }
+    }
+
+    .mark-up-buttons-wrapper {
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 10px;
+
+      button {
+        flex: 1 1 100px;
+        padding: 10px;
+        font-size: 14px;
+      }
+    }
+
+    .new-game-button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+    }
+  }
+}
