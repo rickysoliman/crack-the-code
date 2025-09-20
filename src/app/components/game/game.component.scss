@@ -28,6 +28,7 @@
     gap: 15px;
     align-items: center;
     width: 60%;
+    margin-bottom: 1rem;
 
     .clue {
       text-align: center;
@@ -160,6 +161,9 @@
           font-size: medium;
           justify-content: center;
           text-align: center;
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
         }
 
         .clue-numbers {
