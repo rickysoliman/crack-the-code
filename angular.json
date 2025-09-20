@@ -15,7 +15,7 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:application",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "docs",
             "index": "src/index.html",
@@ -90,5 +90,6 @@
         }
       }
     }
-  }
+  },
+  "defaultProject": "crack-the-code"
 }
