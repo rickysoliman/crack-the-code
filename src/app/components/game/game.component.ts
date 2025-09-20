@@ -368,7 +368,17 @@ export class GameComponent {
 
   newGame(): void {
     this.code = '';
+    this.clues = [];
+    this.selectedClue = null;
+    this.selectedNumber = null;
+
+    this.codeForm.reset();
+
+    this.disableCheckButton = true;
+    this.disableMarkUpButtons = true;
+    this.disableMarkAllAsWrongButton = false;
+    this.disableResetButton = true;
+
     this.generateCode();
-    this.resetMarkUps();
   }
 }
